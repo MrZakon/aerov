@@ -1,0 +1,15 @@
+package net.aero.visuals.feature;
+import com.google.gson.*;
+import net.aero.visuals.ClientRuntime;
+import net.fabricmc.loader.api.FabricLoader;
+import java.nio.file.*;
+import java.util.*;
+public final class AppearanceProfiles {
+    private static final Path directory=FabricLoader.getInstance().getConfigDir().resolve("aerovisuals-appearance");
+    private static final Set<String> ids=Set.of("cosmetics","pet","emotes","world_particles","weather_effects","hand_shaders","jump_circles","item_physics","spatial_audio","custom_fog","footprints","player_trail","inventory_animation","block_highlight","biome_ambience","food_effects","experience_effects","crosshair","hit_sounds","hit_color","view_model","swing_animation");
+    private static Path path(String name){return directory.resolve(net.aero.visuals.config.StudioProfiles.safeName(name)+".json");}
+    public static List<String> list()throws java.io.IOException{Files.createDirectories(directory);try(var files=Files.list(directory)){return files.filter(p->p.getFileName().toString().endsWith(".json")).map(p->p.getFileName().toString().replaceFirst("\\.json$","")).sorted().toList();}}
+    public static void save(String name)throws java.io.IOException{var runtime=ClientRuntime.get();JsonObject modules=new JsonObject();var all=runtime.config().snapshot().getAsJsonObject("modules");for(String id:ids)if(all.has(id))modules.add(id,all.get(id).deepCopy());JsonObject root=new JsonObject();root.addProperty("version",1);root.add("modules",modules);root.add("cosmetics",new Gson().toJsonTree(runtime.cosmeticSelection().all()));Files.createDirectories(directory);Path output=path(name),tmp=output.resolveSibling(output.getFileName()+".tmp");Files.writeString(tmp,new GsonBuilder().setPrettyPrinting().create().toJson(root));Files.move(tmp,output,StandardCopyOption.REPLACE_EXISTING);FeatureJournal.record("Сохранено оформление: "+name);}
+    public static void load(String name)throws java.io.IOException{Path p=path(name);if(Files.size(p)>2_000_000)throw new java.io.IOException("Слишком большой профиль");try{var root=JsonParser.parseString(Files.readString(p)).getAsJsonObject();if(!root.has("modules")||!root.get("modules").isJsonObject())throw new IllegalArgumentException("Нет модулей");var runtime=ClientRuntime.get();var merged=runtime.config().snapshot();for(var entry:root.getAsJsonObject("modules").entrySet())if(ids.contains(entry.getKey()))merged.getAsJsonObject("modules").add(entry.getKey(),entry.getValue().deepCopy());Map<String,Integer> cosmetics=new HashMap<>();if(root.has("cosmetics"))for(var e:root.getAsJsonObject("cosmetics").entrySet())cosmetics.put(e.getKey(),e.getValue().getAsInt());runtime.config().restore(merged);for(String type:new ArrayList<>(runtime.cosmeticSelection().all().keySet()))runtime.cosmeticSelection().clear(type);cosmetics.forEach((type,id)->runtime.cosmeticSelection().set(type,id));runtime.config().flush();FeatureJournal.record("Загружено оформление: "+name);}catch(RuntimeException e){throw new java.io.IOException("Некорректный профиль",e);}}
+    public static Path directory(){return directory;}
+}

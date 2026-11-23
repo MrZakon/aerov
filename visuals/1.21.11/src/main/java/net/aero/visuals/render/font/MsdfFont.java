@@ -1,0 +1,93 @@
+package net.aero.visuals.render.font;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
+import net.minecraft.resource.ResourceManager;
+import net.minecraft.util.Identifier;
+
+/** Метрики атласа, созданного msdf-atlas-gen. */
+public final class MsdfFont {
+    private final Map<Integer, Glyph> glyphs;
+    private final Glyph[] fastGlyphs;
+    private final float lineHeight;
+    private final float ascender;
+    private final float distanceRange;
+    private final float atlasWidth;
+    private final float atlasHeight;
+    private final Identifier texture;
+
+    private MsdfFont(Map<Integer, Glyph> glyphs, float lineHeight, float ascender, float distanceRange,
+                     float atlasWidth, float atlasHeight, Identifier texture) {
+        this.glyphs = glyphs;
+        this.fastGlyphs = new Glyph[2048];
+        for (int i = 0; i < 2048; i++) {
+            this.fastGlyphs[i] = glyphs.get(i);
+        }
+        this.lineHeight = lineHeight;
+        this.ascender = ascender;
+        this.distanceRange = distanceRange;
+        this.atlasWidth = atlasWidth;
+        this.atlasHeight = atlasHeight;
+        this.texture = texture;
+    }
+
+    public static MsdfFont load(ResourceManager manager, Identifier metrics, Identifier texture) throws IOException {
+        JsonObject root;
+        try (InputStreamReader reader = new InputStreamReader(
+                manager.getResource(metrics).orElseThrow(() -> new IOException("Missing font " + metrics))
+                        .getInputStream(), StandardCharsets.UTF_8)) {
+            root = JsonParser.parseReader(reader).getAsJsonObject();
+        }
+        JsonObject atlas = root.getAsJsonObject("atlas");
+        JsonObject metricValues = root.getAsJsonObject("metrics");
+        Map<Integer, Glyph> glyphs = new HashMap<>();
+        JsonArray sourceGlyphs = root.getAsJsonArray("glyphs");
+        sourceGlyphs.forEach(element -> {
+            JsonObject glyph = element.getAsJsonObject();
+            JsonObject plane = glyph.has("planeBounds") ? glyph.getAsJsonObject("planeBounds") : null;
+            JsonObject bounds = glyph.has("atlasBounds") ? glyph.getAsJsonObject("atlasBounds") : null;
+            float advance = finite(glyph, "advance");
+            if (advance < 0) throw new IllegalArgumentException("Negative font glyph advance");
+            glyphs.put(glyph.get("unicode").getAsInt(), new Glyph(advance, readBounds(plane), readBounds(bounds)));
+        });
+        float width = finite(atlas, "width");
+        float height = finite(atlas, "height");
+        if (width < 1 || height < 1) throw new IllegalArgumentException("Invalid font atlas dimensions");
+        return new MsdfFont(glyphs, finite(metricValues, "lineHeight"), finite(metricValues, "ascender"),
+                finite(atlas, "distanceRange"), width, height, texture);
+    }
+
+    private static float finite(JsonObject object, String key) {
+        float value = object.get(key).getAsFloat();
+        if (!Float.isFinite(value)) throw new IllegalArgumentException("Non-finite font metric: " + key);
+        return value;
+    }
+
+    private static Bounds readBounds(JsonObject object) {
+        if (object == null) return null;
+        return new Bounds(finite(object, "left"), finite(object, "bottom"),
+                finite(object, "right"), finite(object, "top"));
+    }
+
+    public Glyph glyph(int codePoint) {
+        if (codePoint >= 0 && codePoint < 2048) {
+            return fastGlyphs[codePoint];
+        }
+        return glyphs.get(codePoint);
+    }
+    public float lineHeight() { return lineHeight; }
+    public float ascender() { return ascender; }
+    public float distanceRange() { return distanceRange; }
+    public float atlasWidth() { return atlasWidth; }
+    public float atlasHeight() { return atlasHeight; }
+    public Identifier texture() { return texture; }
+
+    public record Glyph(float advance, Bounds plane, Bounds atlas) {}
+    public record Bounds(float left, float bottom, float right, float top) {}
+}

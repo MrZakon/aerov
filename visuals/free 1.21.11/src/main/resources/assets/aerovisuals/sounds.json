@@ -1,0 +1,110 @@
+{
+  "enable": {
+    "category": "master",
+    "sounds": [
+      "aerovisuals:enable"
+    ]
+  },
+  "disable": {
+    "category": "master",
+    "sounds": [
+      "aerovisuals:disable"
+    ]
+  },
+  "clickgui_open": {
+    "category": "master",
+    "sounds": [
+      "aerovisuals:clickgui_open"
+    ]
+  },
+  "ui.click_soft": {
+    "category": "master",
+    "sounds": [
+      "aerovisuals:ui/click_soft_01"
+    ]
+  },
+  "ui.click_confirm": {
+    "category": "master",
+    "sounds": [
+      "aerovisuals:ui/click_confirm"
+    ]
+  },
+  "ui.toggle_on": {
+    "category": "master",
+    "sounds": [
+      "aerovisuals:ui/toggle_on"
+    ]
+  },
+  "ui.toggle_off": {
+    "category": "master",
+    "sounds": [
+      "aerovisuals:ui/toggle_off"
+    ]
+  },
+  "ui.navigate": {
+    "category": "master",
+    "sounds": [
+      "aerovisuals:ui/navigate"
+    ]
+  },
+  "ui.dropdown_open": {
+    "category": "master",
+    "sounds": [
+      "aerovisuals:ui/dropdown_open"
+    ]
+  },
+  "ui.dropdown_close": {
+    "category": "master",
+    "sounds": [
+      "aerovisuals:ui/dropdown_close"
+    ]
+  },
+  "ui.dropdown_select": {
+    "category": "master",
+    "sounds": [
+      "aerovisuals:ui/dropdown_select"
+    ]
+  },
+  "ui.slider_tick": {
+    "category": "master",
+    "sounds": [
+      "aerovisuals:ui/slider_tick"
+    ]
+  },
+  "ui.slider_grab": {
+    "category": "master",
+    "sounds": [
+      "aerovisuals:ui/slider_grab"
+    ]
+  },
+  "ui.color_open": {
+    "category": "master",
+    "sounds": [
+      "aerovisuals:ui/color_open"
+    ]
+  },
+  "ui.color_pick": {
+    "category": "master",
+    "sounds": [
+      "aerovisuals:ui/color_pick"
+    ]
+  },
+  "ui.keybind_set": {
+    "category": "master",
+    "sounds": [
+      "aerovisuals:ui/keybind_set"
+    ]
+  },
+  "ui.gui_open": {
+    "category": "master",
+    "sounds": [
+      "aerovisuals:ui/gui_open"
+    ]
+  },
+  "ui.gui_close": {
+    "category": "master",
+    "sounds": [
+      "aerovisuals:ui/gui_close"
+    ]
+  }
+}

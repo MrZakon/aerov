@@ -1,0 +1,45 @@
+{
+  "edition": "free",
+  "minecraft": "1.21.11",
+  "version": "1.1.0",
+  "moduleCount": 11,
+  "perCategory": 2,
+  "mandatoryWatermark": true,
+  "cosmetics": [
+    {
+      "type": "cape",
+      "id": 100,
+      "name": "Плащ - Броя V2"
+    },
+    {
+      "type": "cape",
+      "id": 101,
+      "name": "Плащ - Броя V3"
+    },
+    {
+      "type": "wings",
+      "id": 123,
+      "name": "Purple monster"
+    },
+    {
+      "type": "bodywear",
+      "id": 137,
+      "name": "Катана - ila_studio"
+    },
+    {
+      "type": "hat",
+      "id": 19,
+      "name": "Новогодняя шапка"
+    },
+    {
+      "type": "pet",
+      "id": 126,
+      "name": "Питомец - 1 Год"
+    },
+    {
+      "type": "graffiti",
+      "id": 127,
+      "name": "Граффити - Петух"
+    }
+  ]
+}

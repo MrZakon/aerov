@@ -1,0 +1,79 @@
+// Inspect package contents before obfuscation; this is part of assembling Free.
+tasks.register('validateFreePackage') {
+    group = 'build'
+    description = 'Rejects paid implementations and effect assets in the Free archive.'
+    dependsOn tasks.named('remapJar')
+    doLast {
+        def policy = new groovy.json.JsonSlurper().parseText(file('scripts/free-content-policy.json').getText('UTF-8').replaceFirst('^\\uFEFF', ''))
+        def archive = tasks.named('remapJar').get().archiveFile.get().asFile
+        def receiptFile = file('build/protected/build-receipt.json')
+        def sha256 = { File source ->
+            def digest = java.security.MessageDigest.getInstance('SHA-256')
+            source.withInputStream { stream ->
+                byte[] buffer = new byte[65536]
+                int count
+                while ((count = stream.read(buffer)) > 0) digest.update(buffer, 0, count)
+            }
+            digest.digest().encodeHex().toString().toUpperCase(java.util.Locale.ROOT)
+        }
+        // OBF replaces the canonical filename; on repeated assemble inspect its saved raw input.
+        if (receiptFile.isFile()) {
+            def receipt = new groovy.json.JsonSlurper().parseText(receiptFile.getText('UTF-8').replaceFirst('^\\uFEFF', ''))
+            if (sha256(archive) == receipt.protectedSHA256) {
+                archive = file(receipt.raw)
+                if (!archive.isFile() || sha256(archive) != receipt.sourceSHA256)
+                    throw new GradleException('Cannot inspect the original Free archive; run clean assemble.')
+            }
+        }
+        def names = []
+        new java.util.zip.ZipFile(archive).withCloseable { zip ->
+            zip.entries().each { entry -> if (!entry.directory) names.add(entry.name) }
+        }
+        def bad = []
+        def moduleClasses = []
+        def importedTypes = []
+        names.each { name ->
+            if (name.endsWith('.class')) {
+                def type = name.substring(0, name.length() - 6)
+                def outer = type.tokenize('$')[0]
+                if (policy.forbiddenPrefixes.any { type.startsWith(it) }) bad.add(name)
+                if (type.startsWith('net/aero/visuals/module/impl/')) {
+                    if (!policy.allowedModuleImplementations.contains(outer)) bad.add(name)
+                    if (!type.contains('$')) moduleClasses.add(type)
+                }
+                if (type.startsWith('net/aero/visuals/feature/')) {
+                    if (!policy.allowedFeatureSources.contains(outer)) bad.add(name)
+                    if (type.startsWith('net/aero/visuals/feature/ImportedFeatures$')) {
+                        def nested = type.substring('net/aero/visuals/feature/ImportedFeatures$'.length()).tokenize('$')[0]
+                        if (!policy.allowedImportedTypes.contains(nested)) bad.add(name)
+                        importedTypes.add(nested)
+                    }
+                }
+                if (type.startsWith('net/aero/visuals/mixin/') && !policy.allowedMixins.contains(outer)) bad.add(name)
+            }
+            if (name.startsWith('assets/aerovisuals/')) {
+                if (name.contains('/sounds/showcase/') || name.contains('/sounds/ambience/') ||
+                        name.contains('/textures/target/') || name.contains('/textures/effects/') ||
+                        name.contains('/showcase_material.') || name.contains('/imported_fx.') ||
+                        name.contains('/scene_effects.') || name.contains('/hands_overlay.')) bad.add(name)
+            }
+        }
+        def missing = policy.allowedModuleImplementations.findAll { !names.contains(it + '.class') }
+        if (!bad.isEmpty() || !missing.isEmpty())
+            throw new GradleException('Invalid Free package. Unexpected: ' + bad.unique().join(', ') + '; missing: ' + missing.join(', '))
+        def moduleCount = moduleClasses.count { !it.endsWith('/HudWidgetModule') } +
+                importedTypes.unique().count { it != 'Feature' }
+        if (moduleCount != policy.moduleCount)
+            throw new GradleException("Expected " + policy.moduleCount + " Free modules, got " + moduleCount)
+        def output = file('build/free-content-manifest.json')
+        output.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson([
+            edition: 'free', moduleCount: moduleCount, paidImplementations: 0,
+            moduleImplementationClasses: moduleClasses.sort(), importedTypes: importedTypes.unique().sort(),
+            totalClasses: names.count { it.endsWith('.class') },
+            remoteCosmeticFiles: names.count { it.startsWith('assets/aerovisuals/cosmetics/archive/') },
+            inputSHA256: sha256(archive), testsRun: false, gameLaunched: false
+        ]))
+        logger.lifecycle("Free package: " + moduleCount + " modules, paid implementations absent; full remote cosmetic catalog retained.")
+    }
+}
+tasks.named('protectRelease') { dependsOn tasks.named('validateFreePackage') }

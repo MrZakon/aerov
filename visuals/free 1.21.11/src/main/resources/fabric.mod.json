@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "aerovisuals",
+  "version": "${version}",
+  "name": "AeroVisuals Free",
+  "description": "Free client-side visuals for Minecraft ${minecraft_version}: limited personal cosmetics, full player cosmetic rendering, friends and cloud configs.",
+  "authors": [
+    "AeroVisuals"
+  ],
+  "license": "All-Rights-Reserved",
+  "environment": "client",
+  "icon": "assets/aerovisuals/cosmic-logo.png",
+  "entrypoints": {
+    "client": [
+      "net.aero.visuals.AeroVisuals"
+    ]
+  },
+  "mixins": [
+    "aerovisuals.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "~${minecraft_version}",
+    "java": ">=${java_version}",
+    "fabric-api": "*"
+  },
+  "custom": {
+    "aerovisuals:edition": "free"
+  }
+}

@@ -1,0 +1,692 @@
+{
+  "format": 1,
+  "items": [
+    {
+      "id": 137,
+      "type": "bodywear",
+      "name": "Катана - ila_studio",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/bodywear/137"
+    },
+    {
+      "id": 36,
+      "type": "bodywear",
+      "name": "Рюкзак - Louis Vuitton",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/bodywear/36"
+    },
+    {
+      "id": 37,
+      "type": "bodywear",
+      "name": "Рюкзак - Gucci",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/bodywear/37"
+    },
+    {
+      "id": 38,
+      "type": "bodywear",
+      "name": "Рюкзак - Adidas",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/bodywear/38"
+    },
+    {
+      "id": 39,
+      "type": "bodywear",
+      "name": "Рюкзак - Nike",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/bodywear/39"
+    },
+    {
+      "id": 40,
+      "type": "bodywear",
+      "name": "Рюкзак - Supreme",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/bodywear/40"
+    },
+    {
+      "id": 41,
+      "type": "bodywear",
+      "name": "Рюкзак - Vlone",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/bodywear/41"
+    },
+    {
+      "id": 42,
+      "type": "bodywear",
+      "name": "Рюкзак - Bape",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/bodywear/42"
+    },
+    {
+      "id": 43,
+      "type": "bodywear",
+      "name": "Рюкзак - Balenciaga",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/bodywear/43"
+    },
+    {
+      "id": 44,
+      "type": "bodywear",
+      "name": "Рюкзак -  Chrome Hearts",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/bodywear/44"
+    },
+    {
+      "id": 70,
+      "type": "bodywear",
+      "name": "Рюкзак - Bunny",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/bodywear/70"
+    },
+    {
+      "id": 95,
+      "type": "bodywear",
+      "name": "Рюкзак -  PePe",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/bodywear/95"
+    },
+    {
+      "id": 100,
+      "type": "cape",
+      "name": "Плащ - Броя V2",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/cape/100"
+    },
+    {
+      "id": 101,
+      "type": "cape",
+      "name": "Плащ - Броя V3",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/cape/101"
+    },
+    {
+      "id": 102,
+      "type": "cape",
+      "name": "Плащ - Аквыч V2",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/cape/102"
+    },
+    {
+      "id": 130,
+      "type": "cape",
+      "name": "Плащ - Ягуар V2",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/cape/130"
+    },
+    {
+      "id": 131,
+      "type": "cape",
+      "name": "Плащ - Ягуар",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/cape/131"
+    },
+    {
+      "id": 58,
+      "type": "cape",
+      "name": "Плащ -  Knife",
+      "has_model": false,
+      "cape_animation": {
+        "frameWidth": 44,
+        "frameHeight": 34,
+        "frameTime": 3
+      },
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/cape/58"
+    },
+    {
+      "id": 59,
+      "type": "cape",
+      "name": "Плащ - Layout",
+      "has_model": false,
+      "cape_animation": {
+        "frameWidth": 176,
+        "frameHeight": 136,
+        "frameTime": 1
+      },
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/cape/59"
+    },
+    {
+      "id": 60,
+      "type": "cape",
+      "name": "Плащ - Chrome",
+      "has_model": false,
+      "cape_animation": {
+        "frameWidth": 176,
+        "frameHeight": 136,
+        "frameTime": 4
+      },
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/cape/60"
+    },
+    {
+      "id": 72,
+      "type": "cape",
+      "name": "Плащ - Eggs",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/cape/72"
+    },
+    {
+      "id": 75,
+      "type": "cape",
+      "name": "Флюгер Плащ 1",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/cape/75"
+    },
+    {
+      "id": 76,
+      "type": "cape",
+      "name": "Плащ - Fluger",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/cape/76"
+    },
+    {
+      "id": 77,
+      "type": "cape",
+      "name": "Плащ - Fluger V3",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/cape/77"
+    },
+    {
+      "id": 78,
+      "type": "cape",
+      "name": "free",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/cape/78"
+    },
+    {
+      "id": 79,
+      "type": "cape",
+      "name": "Плащ - Fluger V2",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/cape/79"
+    },
+    {
+      "id": 83,
+      "type": "cape",
+      "name": "Плащ - Броя",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/cape/83"
+    },
+    {
+      "id": 87,
+      "type": "cape",
+      "name": "Плащ - Aqua",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/cape/87"
+    },
+    {
+      "id": 127,
+      "type": "graffiti",
+      "name": "Граффити - Петух",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/graffiti/127"
+    },
+    {
+      "id": 128,
+      "type": "graffiti",
+      "name": "Граффити - 67",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/graffiti/128"
+    },
+    {
+      "id": 129,
+      "type": "graffiti",
+      "name": "Граффити - Сова на Скакалке",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/graffiti/129"
+    },
+    {
+      "id": 138,
+      "type": "graffiti",
+      "name": "Граффити - Чиназес",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/graffiti/138"
+    },
+    {
+      "id": 139,
+      "type": "graffiti",
+      "name": "Граффити - Doble R",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/graffiti/139"
+    },
+    {
+      "id": 140,
+      "type": "graffiti",
+      "name": "Граффити - EZ",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/graffiti/140"
+    },
+    {
+      "id": 141,
+      "type": "graffiti",
+      "name": "Граффити - Kawai",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/graffiti/141"
+    },
+    {
+      "id": 142,
+      "type": "graffiti",
+      "name": "Граффити - iба чьотко",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/graffiti/142"
+    },
+    {
+      "id": 143,
+      "type": "graffiti",
+      "name": "Граффити - Homelander",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/graffiti/143"
+    },
+    {
+      "id": 144,
+      "type": "graffiti",
+      "name": "Граффити - Мяу",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/graffiti/144"
+    },
+    {
+      "id": 145,
+      "type": "graffiti",
+      "name": "Граффити - Sigma",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/graffiti/145"
+    },
+    {
+      "id": 146,
+      "type": "graffiti",
+      "name": "Граффити - W",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/graffiti/146"
+    },
+    {
+      "id": 147,
+      "type": "graffiti",
+      "name": "ÐÐ°ÑÑÐµÑ",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/graffiti/147"
+    },
+    {
+      "id": 149,
+      "type": "graffiti",
+      "name": "Граффити - Меч",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/graffiti/149"
+    },
+    {
+      "id": 150,
+      "type": "graffiti",
+      "name": "Граффити - Корона",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/graffiti/150"
+    },
+    {
+      "id": 151,
+      "type": "graffiti",
+      "name": "Граффити - Призрак",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/graffiti/151"
+    },
+    {
+      "id": 154,
+      "type": "graffiti",
+      "name": "Граффити - +РЭП",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/graffiti/154"
+    },
+    {
+      "id": 155,
+      "type": "graffiti",
+      "name": "Граффити - 5 СЕК",
+      "has_model": false,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/graffiti/155"
+    },
+    {
+      "id": 19,
+      "type": "hat",
+      "name": "Новогодняя шапка",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/hat/19"
+    },
+    {
+      "id": 48,
+      "type": "hat",
+      "name": "Шапка - Armour",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/hat/48"
+    },
+    {
+      "id": 49,
+      "type": "hat",
+      "name": "Шапка - Capybara",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/hat/49"
+    },
+    {
+      "id": 50,
+      "type": "hat",
+      "name": "Шапка -  Chicken",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/hat/50"
+    },
+    {
+      "id": 51,
+      "type": "hat",
+      "name": "Шапка - Buff",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/hat/51"
+    },
+    {
+      "id": 52,
+      "type": "hat",
+      "name": "Шапка - Fox",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/hat/52"
+    },
+    {
+      "id": 53,
+      "type": "hat",
+      "name": "Шапка - Pepe",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/hat/53"
+    },
+    {
+      "id": 54,
+      "type": "hat",
+      "name": "Шапка - Goat",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/hat/54"
+    },
+    {
+      "id": 55,
+      "type": "hat",
+      "name": "Шапка - Panda",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/hat/55"
+    },
+    {
+      "id": 56,
+      "type": "hat",
+      "name": "Шапка - Pig",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/hat/56"
+    },
+    {
+      "id": 57,
+      "type": "hat",
+      "name": "Шапка - Sheep",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/hat/57"
+    },
+    {
+      "id": 67,
+      "type": "hat",
+      "name": "Шапка - Spring",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/hat/67"
+    },
+    {
+      "id": 68,
+      "type": "hat",
+      "name": "Шапка - Bunny",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/hat/68"
+    },
+    {
+      "id": 69,
+      "type": "hat",
+      "name": "Шапка - Bloom",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/hat/69"
+    },
+    {
+      "id": 80,
+      "type": "hat",
+      "name": "Шапка - Fluger",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/hat/80"
+    },
+    {
+      "id": 85,
+      "type": "hat",
+      "name": "Маска - Bro9I",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/hat/85"
+    },
+    {
+      "id": 88,
+      "type": "hat",
+      "name": "Шапка - Аквыч",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/hat/88"
+    },
+    {
+      "id": 92,
+      "type": "hat",
+      "name": "Шапка - Bear",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/hat/92"
+    },
+    {
+      "id": 96,
+      "type": "hat",
+      "name": "Шапка - ПеПе",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/hat/96"
+    },
+    {
+      "id": 97,
+      "type": "hat",
+      "name": "Шапка - Happy",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/hat/97"
+    },
+    {
+      "id": 98,
+      "type": "hat",
+      "name": "Нимб",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/hat/98"
+    },
+    {
+      "id": 126,
+      "type": "pet",
+      "name": "Питомец - 1 Год",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/pet/126"
+    },
+    {
+      "id": 132,
+      "type": "pet",
+      "name": "Питомец - Ягуар",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/pet/132"
+    },
+    {
+      "id": 133,
+      "type": "pet",
+      "name": "Питомец - Cergifff",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/pet/133"
+    },
+    {
+      "id": 134,
+      "type": "pet",
+      "name": "Питомец - Ila_Studio",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/pet/134"
+    },
+    {
+      "id": 135,
+      "type": "pet",
+      "name": "Питомец - Creeper",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/pet/135"
+    },
+    {
+      "id": 45,
+      "type": "pet",
+      "name": "Питомец - Angel",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/pet/45"
+    },
+    {
+      "id": 46,
+      "type": "pet",
+      "name": "Питомец - Demon",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/pet/46"
+    },
+    {
+      "id": 47,
+      "type": "pet",
+      "name": "Питомец - Buddy",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/pet/47"
+    },
+    {
+      "id": 66,
+      "type": "pet",
+      "name": "Питомец - Easter Egg",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/pet/66"
+    },
+    {
+      "id": 81,
+      "type": "pet",
+      "name": "Питомец - Fluger Door",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/pet/81"
+    },
+    {
+      "id": 84,
+      "type": "pet",
+      "name": "Питомец - Diamond",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/pet/84"
+    },
+    {
+      "id": 89,
+      "type": "pet",
+      "name": "Акви Пет 1",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/pet/89"
+    },
+    {
+      "id": 90,
+      "type": "pet",
+      "name": "Питомец - Аквыч",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/pet/90"
+    },
+    {
+      "id": 93,
+      "type": "pet",
+      "name": "Питомец - Bee",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/pet/93"
+    },
+    {
+      "id": 123,
+      "type": "wings",
+      "name": "Purple monster",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/wings/123"
+    },
+    {
+      "id": 124,
+      "type": "wings",
+      "name": "Крылья - Ghoul",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/wings/124"
+    },
+    {
+      "id": 136,
+      "type": "wings",
+      "name": "Крылья - Ягуар",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/wings/136"
+    },
+    {
+      "id": 25,
+      "type": "wings",
+      "name": "Крылья - Aurum",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/wings/25"
+    },
+    {
+      "id": 61,
+      "type": "wings",
+      "name": "Крылья - Angel",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/wings/61"
+    },
+    {
+      "id": 62,
+      "type": "wings",
+      "name": "Крылья - Dragon",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/wings/62"
+    },
+    {
+      "id": 63,
+      "type": "wings",
+      "name": "Крылья - Diamond",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/wings/63"
+    },
+    {
+      "id": 64,
+      "type": "wings",
+      "name": "Крылья - Spider",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/wings/64"
+    },
+    {
+      "id": 65,
+      "type": "wings",
+      "name": "Крылья - Easter",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/wings/65"
+    },
+    {
+      "id": 73,
+      "type": "wings",
+      "name": "Крылья -  Radiant",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/wings/73"
+    },
+    {
+      "id": 82,
+      "type": "wings",
+      "name": "Крылья - Fluger",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/wings/82"
+    },
+    {
+      "id": 86,
+      "type": "wings",
+      "name": "Трезубец - Броя",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/wings/86"
+    },
+    {
+      "id": 91,
+      "type": "wings",
+      "name": "Крылья - Аквыч",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/wings/91"
+    },
+    {
+      "id": 94,
+      "type": "wings",
+      "name": "Крылья  - Guard",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/wings/94"
+    },
+    {
+      "id": 99,
+      "type": "wings",
+      "name": "Крылья - Dark",
+      "has_model": true,
+      "resourcePath": "assets/aerovisuals/cosmetics/archive/wings/99"
+    }
+  ]
+}

@@ -1,0 +1,198 @@
+package net.aero.visuals.feature;
+
+import net.aero.visuals.ClientRuntime;
+import net.aero.visuals.event.Subscribe;
+import net.aero.visuals.event.impl.*;
+import net.aero.visuals.module.ModuleCategory;
+import net.aero.visuals.module.ModuleManager;
+import net.aero.visuals.module.setting.*;
+import net.aero.visuals.render.*;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.*;
+import net.minecraft.client.sound.*;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.particle.*;
+import net.minecraft.sound.*;
+import net.minecraft.util.*;
+import net.minecraft.util.hit.*;
+import net.minecraft.util.math.*;
+import java.util.*;
+
+public final class ExtraFeatures {
+    private ExtraFeatures() {}
+    public static void install(ModuleManager m) {
+        m.register(new Footprints());m.register(new Trail());m.register(new InventoryAnimation());
+        m.register(new BlockHighlight());m.register(new Ambience());m.register(new FoodEffects());
+        m.register(new ExperienceEffects());m.register(new History());m.register(new Screenshots());m.register(new StyleProfiles());
+        for(var module:m.all()) module.onStateChanged(on->FeatureJournal.record(module.name()+(on?" включён":" выключен")));
+    }
+    private static MinecraftClient mc(){return MinecraftClient.getInstance();}
+    private record Mark(Vec3d p,float yaw,long born){}
+    private abstract static class PathEffect extends ImportedFeatures.Feature implements WorldRenderable {
+        final Deque<Mark> marks=new ArrayDeque<>();Object world;Vec3d last;boolean left;
+        final DoubleSetting life,spacing;final ColorSetting color;
+        PathEffect(String id,String name,String desc,double duration,double step){super(id,name,desc,ModuleCategory.RENDER);life=number("duration","Длительность (сек.)",duration,.3,12,.1);spacing=number("spacing","Расстояние",step,.05,1,.05);color=tint("color","Цвет",0xFFAF95FF);}
+        abstract boolean allowed();abstract Vec3d position();
+        @Subscribe private void tick(TickEvent.Client e){var c=e.client();if(c.world!=world||c.player==null){clear();world=c.world;}if(c.player==null)return;
+            long now=System.nanoTime();marks.removeIf(p->(now-p.born)/1e9>life.get());if(!allowed()){last=null;return;}Vec3d p=position();
+            if(last!=null&&p.squaredDistanceTo(last)>16){marks.clear();last=null;}
+            if(last==null||p.squaredDistanceTo(last)>=spacing.get()*spacing.get()){last=p;left=!left;add(p,c.player.getYaw(),now);while(marks.size()>240)marks.removeFirst();}}
+        void add(Vec3d p,float yaw,long now){marks.add(new Mark(p,yaw,now));}
+        void clear(){marks.clear();last=null;world=null;}
+        @Override protected void onDisable(){clear();}
+        int faded(Mark p){return ColorUtil.withAlpha(color.get().eval(),(int)((color.get().eval()>>>24)*Math.clamp(1-(System.nanoTime()-p.born)/1e9/life.get(),0,1)));}
+        @Override public final void renderWorld(WorldRenderContext c){if(c.matrices()==null||c.consumers()==null)return;var cam=mc().gameRenderer.getCamera().getCameraPos();c.matrices().push();try{c.matrices().translate(-cam.x,-cam.y,-cam.z);draw(c);}finally{c.matrices().pop();}}
+        abstract void draw(WorldRenderContext c);
+    }
+    public static final class Footprints extends PathEffect {
+        public Footprints(){super("footprints","Footprints","Чередующиеся отпечатки подошв на твёрдой поверхности с затуханием.",4,.38);}
+        boolean allowed(){return mc().player.isOnGround()&&!mc().player.isTouchingWater()&&mc().player.getVelocity().horizontalLengthSquared()>.002;}
+        Vec3d position(){var p=mc().player;return p.getEntityPos().add(0,.015,0);}
+        @Override void add(Vec3d p,float yaw,long now){double a=Math.toRadians(yaw);double side=left?.13:-.13;marks.add(new Mark(p.add(Math.cos(a)*side,0,Math.sin(a)*side),yaw,now));}
+        void draw(WorldRenderContext c){var v=c.consumers().getBuffer(RenderLayers.linesTranslucent());for(var p:marks){double a=Math.toRadians(p.yaw),s=Math.sin(a),co=Math.cos(a);int col=faded(p);for(int i=0;i<5;i++){double z=-.12+i*.055;Vec3d l=p.p.add(-.065*co-z*s,0,-.065*s+z*co),r=p.p.add(.065*co-z*s,0,.065*s+z*co);LineRenderer.renderLine(c.matrices(),v,l.x,l.y,l.z,r.x,r.y,r.z,col);}}}
+    }
+    public static final class Trail extends PathEffect {
+        final DoubleSetting width=number("width","Ширина ленты",.2,.03,.8,.01);final BooleanSetting firstPerson=flag("first_person","Видно от первого лица",false);
+        public Trail(){super("player_trail","Player Trail","Лента за своим персонажем с ограничением длины и плавным исчезновением.",1.8,.08);}
+        boolean allowed(){return mc().player.getVelocity().lengthSquared()>.003;}
+        Vec3d position(){return mc().player.getEntityPos().add(0,.7,0);}
+        void draw(WorldRenderContext c){if(mc().options.getPerspective().isFirstPerson()&&!firstPerson.get())return;var v=c.consumers().getBuffer(RenderLayers.debugQuads());Mark before=null;for(var p:marks){if(before!=null&&p.p.squaredDistanceTo(before.p)<4){double w=width.get()/2;int a=faded(before),b=faded(p);vertex(c,v,before.p.add(0,w,0),a);vertex(c,v,before.p.add(0,-w,0),a);vertex(c,v,p.p.add(0,-w,0),b);vertex(c,v,p.p.add(0,w,0),b);vertex(c,v,p.p.add(0,w,0),b);vertex(c,v,p.p.add(0,-w,0),b);vertex(c,v,before.p.add(0,-w,0),a);vertex(c,v,before.p.add(0,w,0),a);}before=p;}}
+    }
+    static void vertex(WorldRenderContext c,VertexConsumer v,Vec3d p,int color){v.vertex(c.matrices().peek(),(float)p.x,(float)p.y,(float)p.z).color(color);}
+    public static final class InventoryAnimation extends ImportedFeatures.Feature {
+        public final DoubleSetting duration=number("duration","Длительность (мс)",230,80,600,10);
+        public final ColorSetting color=tint("color","Выделение слота",0x659C80FF);
+        public InventoryAnimation(){super("inventory_animation","Inventory Animation","Плавное появление и изменение предметов, анимированное выделение слотов. Область нажатия сохраняется.", ModuleCategory.INVENTORY);}
+    }
+    public static final class BlockHighlight extends ImportedFeatures.Feature implements WorldRenderable {
+        final ColorSetting color=tint("color","Цвет",0xFFA88AFF);final DoubleSetting rounding=number("rounding","Скругление",.08,0,.24,.01),fill=number("fill","Заливка",.12,0,.5,.01);
+        public BlockHighlight(){super("block_highlight","Block Highlight","Контур и заливка выбранного блока с учётом формы. Без отображения сквозь стены.", ModuleCategory.RENDER);}
+        @Override public void renderWorld(WorldRenderContext c){if(!(mc().crosshairTarget instanceof BlockHitResult hit)||hit.getType()!=HitResult.Type.BLOCK||c.matrices()==null||c.consumers()==null||mc().world==null)return;var pos=hit.getBlockPos();var shape=mc().world.getBlockState(pos).getOutlineShape(mc().world,pos);if(shape.isEmpty())return;
+            var cam=mc().gameRenderer.getCamera().getCameraPos();var m=c.matrices();m.push();try{m.translate(pos.getX()-cam.x,pos.getY()-cam.y,pos.getZ()-cam.z);
+            for(Box raw:shape.getBoundingBoxes()){Box b=raw.expand(.002);double r=Math.min(rounding.get(),Math.min(b.getLengthX(),Math.min(b.getLengthY(),b.getLengthZ()))*.24);
+                for(int axis=0;axis<3;axis++)for(int side=0;side<2;side++){double fixed=axis==0?(side==0?b.minX:b.maxX):axis==1?(side==0?b.minY:b.maxY):(side==0?b.minZ:b.maxZ);double lo=axis==0?b.minY:b.minX,hi=axis==0?b.maxY:b.maxX,bottom=axis==2?b.minY:b.minZ,top=axis==2?b.maxY:b.maxZ;List<Vec3d> points=new ArrayList<>();double[][] centers={{hi-r,top-r},{lo+r,top-r},{lo+r,bottom+r},{hi-r,bottom+r}};
+                    for(int corner=0;corner<4;corner++)for(int j=0;j<=5;j++){double a=(corner*90+j*18)*Math.PI/180,u=centers[corner][0]+Math.cos(a)*r,v=centers[corner][1]+Math.sin(a)*r;points.add(axis==0?new Vec3d(fixed,u,v):axis==1?new Vec3d(u,fixed,v):new Vec3d(u,v,fixed));}
+                    var lines=c.consumers().getBuffer(RenderLayers.linesTranslucent());for(int i=0;i<points.size();i++){var a=points.get(i);var d=points.get((i+1)%points.size());LineRenderer.renderLine(m,lines,a.x,a.y,a.z,d.x,d.y,d.z,color.get().eval());}
+                    if(fill.get()>0){var quads=c.consumers().getBuffer(RenderLayers.debugQuads());Vec3d center=axis==0?new Vec3d(fixed,(lo+hi)/2,(bottom+top)/2):axis==1?new Vec3d((lo+hi)/2,fixed,(bottom+top)/2):new Vec3d((lo+hi)/2,(bottom+top)/2,fixed);int col=ColorUtil.withAlpha(color.get().eval(),(int)(fill.get()*255));for(int i=0;i<points.size();i++){var a=points.get(i);var d=points.get((i+1)%points.size());vertex(c,quads,center,col);vertex(c,quads,a,col);vertex(c,quads,d,col);vertex(c,quads,center,col);vertex(c,quads,center,col);vertex(c,quads,d,col);vertex(c,quads,a,col);vertex(c,quads,center,col);}}
+                }}}finally{m.pop();}}
+    }
+    public static final class Ambience extends ImportedFeatures.Feature {
+        final DoubleSetting volume=number("volume","Громкость",.25,0,1,.05);final BooleanSetting wind=flag("wind","Ветер",true),forest=flag("forest","Лес",true),cave=flag("cave","Пещеры",true);
+        SoundInstance playing;String current="";long next;Object world;
+        private float playingVolume;
+        public Ambience(){super("biome_ambience","Biome Ambience","Локальная атмосфера: ветер, лес и пещеры; биом, высота, время суток. Без смены ванильных настроек.", ModuleCategory.MISC);}
+        @Subscribe private void tick(TickEvent.Client e){var c=e.client();if(c.world==null||c.player==null){stop();world=null;return;}if(world!=c.world){stop();world=c.world;}if(c.isPaused()){stop();return;}String biome=c.world.getBiome(c.player.getBlockPos()).getKey().map(k->k.getValue().getPath()).orElse("");boolean underground=!c.world.isSkyVisible(c.player.getBlockPos())&&c.player.getY()<c.world.getSeaLevel();String type=underground?(cave.get()?"cave":""):(forest.get()&&(biome.contains("forest")||biome.contains("taiga")||biome.contains("jungle"))?"forest":wind.get()?"wind":"");
+            String variant=type.equals("forest")&&c.world.isNight()?"forest_night":type;long now=System.nanoTime();if(!variant.equals(current)){stop();current=variant;}float gain = volume.get().floatValue();
+            if (variant.isEmpty() || gain == 0) { stop(); return; }
+            if (playing == null || gain != playingVolume || now - next >= 0) {
+                if (playing != null) c.getSoundManager().stop(playing);
+                playingVolume = gain;playing=new PositionedSoundInstance(Identifier.of("aerovisuals","ambience."+variant),SoundCategory.AMBIENT,gain,1,c.player.getRandom(),false,0,SoundInstance.AttenuationType.NONE,0,0,0,true);c.getSoundManager().play(playing);next=now+8_000_000_000L;}}
+        void stop(){if(playing!=null)mc().getSoundManager().stop(playing);playing=null;current="";next=0;}
+        @Override protected void onDisable(){stop();world=null;}
+    }
+    public static final class FoodEffects extends ImportedFeatures.Feature {
+        final DoubleSetting count=number("count","Частицы",4,1,12,1);final BooleanSetting sound=flag("sound","Звук завершения",true);long ticks;Object world;
+        public FoodEffects(){super("food_effects","Food Effects","Локальные частицы еды и напитков; звук только при завершении употребления.", ModuleCategory.RENDER);}
+        @Override protected void onDisable(){ticks=0;world=null;}
+        public void completedUse(){if(isEnabled()&&sound.get()){mc().getSoundManager().play(PositionedSoundInstance.ui(SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME,1.6f,.2f));}}
+        @Subscribe private void tick(TickEvent.Client event) {
+            var client = event.client();
+            var player = client.player;
+            if (player == null || client.world == null) {
+                ticks = 0;
+                world = null;
+                return;
+            }
+            if (world != client.world) {
+                ticks = 0;
+                world = client.world;
+            }
+            var item = player.getActiveItem();
+            var action = item.getUseAction();
+            boolean food = action == net.minecraft.item.consume.UseAction.EAT;
+            boolean using = player.isUsingItem() && !item.isEmpty()
+                    && (food || action == net.minecraft.item.consume.UseAction.DRINK);
+            if (!using) {
+                ticks = 0;
+                return;
+            }
+            if (++ticks < 3) return;
+            ticks = 0;
+            var center = player.getEyePos().add(player.getRotationVec(1).multiply(.35));
+            var random = player.getRandom();
+            ParticleEffect particle = food
+                    ? new ItemStackParticleEffect(ParticleTypes.ITEM, item.copy())
+                    : ParticleTypes.SPLASH;
+            int particles = count.get().intValue();
+            for (int index = 0; index < particles; index++) {
+                client.particleManager.addParticle(particle, center.x + (random.nextDouble() - .5) * .15,
+                        center.y - .15, center.z + (random.nextDouble() - .5) * .15,
+                        (random.nextDouble() - .5) * .03, .025, (random.nextDouble() - .5) * .03);
+            }
+        }
+    }
+    public static final class ExperienceEffects extends ImportedFeatures.Feature {
+        final DoubleSetting count=number("count","Частицы",12,3,30,1);final BooleanSetting sound=flag("sound","Дополнительный звук",false);int xp = -1;
+        private java.lang.ref.WeakReference<Object> xpPlayer;
+        private java.lang.ref.WeakReference<Object> xpWorld;
+        public ExperienceEffects(){super("experience_effects","Experience Effects","Кольцо искр при увеличении собственного опыта. Не создаёт и не собирает сферы.", ModuleCategory.RENDER);}
+
+        @Override protected void onDisable() {
+            xp = -1;
+            xpPlayer = null;
+            xpWorld = null;
+        }
+
+        @Subscribe private void tick(TickEvent.Client event) {
+            var client = event.client();
+            var player = client.player;
+            var world = client.world;
+            if (player == null || world == null) {
+                onDisable();
+                return;
+            }
+            int next = player.totalExperience;
+            if (xpPlayer == null || xpPlayer.get() != player || xpWorld == null || xpWorld.get() != world) {
+                xpPlayer = new java.lang.ref.WeakReference<>(player);
+                xpWorld = new java.lang.ref.WeakReference<>(world);
+                xp = next;
+                return;
+            }
+            int previous = xp;
+            xp = next;
+            if (previous < 0 || next <= previous) return;
+            var position = player.getEntityPos().add(0, .25, 0);
+            int particles = count.get().intValue();
+            double step = Math.PI * 2 / particles;
+            for (int index = 0; index < particles; index++) {
+                double x = Math.cos(index * step);
+                double z = Math.sin(index * step);
+                client.particleManager.addParticle(ParticleTypes.END_ROD, position.x + x * .45, position.y,
+                        position.z + z * .45, x * .035, .04, z * .035);
+            }
+            if (sound.get()) client.getSoundManager().play(PositionedSoundInstance.ui(SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, 1.8f, .15f));
+        }
+    }
+    public static final class History extends ImportedFeatures.Feature {
+        final DoubleSetting key=number("key","Клавиша (H=72)",72,32,348,1);final BooleanSetting open=flag("open","Открыть историю",false);
+        public History(){super("notification_history","Notification History","История уведомлений клиента и переключений модулей; последние 200 записей сохраняются.", ModuleCategory.MISC);}
+        @Subscribe private void tick(TickEvent.Client e){if(open.get()){open.set(false);FeatureScreens.history(e.client().currentScreen);}}
+        @Subscribe private void key(KeyEvent e){if(e.action()==1&&e.key()==key.get().intValue()&&mc().currentScreen==null)FeatureScreens.history(null);}
+    }
+    public static final class Screenshots extends ImportedFeatures.Feature {
+        final BooleanSetting open=flag("open","Открыть последний снимок",false);final DoubleSetting key=number("key","Клавиша (F8=297)",297,32,348,1),duration=number("duration","Показ миниатюры (сек.)",6,2,20,1);
+        public Screenshots(){super("screenshot_preview","Screenshot Preview","Миниатюра новых PNG из screenshots, просмотр и кнопка открытия папки. F8 — последний снимок.", ModuleCategory.MISC);}
+        @Subscribe private void tick(TickEvent.Client e){ScreenshotPreview.tick();if(open.get()){open.set(false);FeatureScreens.screenshot(e.client().currentScreen);}}
+        @Subscribe private void key(KeyEvent e){if(e.action()==1&&e.key()==key.get().intValue()&&mc().currentScreen==null)FeatureScreens.screenshot(null);}
+        @Subscribe private void draw(Render2DEvent e){ScreenshotPreview.overlay(e.context(),duration.get());}
+        @Override protected void onEnable(){ScreenshotPreview.start();}
+        @Override protected void onDisable(){ScreenshotPreview.close();}
+    }
+    public static final class StyleProfiles extends ImportedFeatures.Feature {
+        final BooleanSetting open=flag("open","Открыть профили оформления",false);final DoubleSetting key=number("key","Клавиша (P=80)",80,32,348,1);
+        public StyleProfiles(){super("style_profiles","Style Profiles","Именованные наборы косметики, цветов и визуальных эффектов. Главное меню и HUD не сохраняются.", ModuleCategory.MISC);}
+        @Subscribe private void tick(TickEvent.Client e){if(open.get()){open.set(false);FeatureScreens.profiles(e.client().currentScreen);}}
+        @Subscribe private void key(KeyEvent e){if(e.action()==1&&e.key()==key.get().intValue()&&mc().currentScreen==null)FeatureScreens.profiles(null);}
+    }
+}

@@ -1,0 +1,450 @@
+package client.module;
+
+import client.audio.SoundEngine;
+import client.concurrent.ModuleRegistry;
+import client.concurrent.SystemClient;
+import client.concurrent.Translations;
+import client.data.AnimatedFloat;
+import client.data.NoSlowState;
+import client.data.Rotation;
+import client.data.SlotSelection;
+import client.enums.SoundEvent;
+import client.render.HudRenderContext;
+import client.render.LevelRenderContext;
+import client.setting.KeybindSetting;
+import client.setting.Setting;
+import client.util.AttackEvent;
+import client.util.InteractEvent;
+import client.util.NotificationManager;
+import client.util.TextHash;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+
+public abstract class Module extends Feature {
+   private final String name;
+   private final Category category;
+   private String description = "";
+   private volatile boolean enabled = false;
+   private boolean toggling = false;
+   private final List<Setting> settings = new ArrayList<>();
+   private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+   protected KeybindSetting keybind;
+
+   public Module(String text, Category category2) {
+      this.name = text;
+      this.category = category2;
+      if (this.keybind == null) {
+         KeybindSetting keybindsetting = new KeybindSetting("", "", -1, this::toggle);
+         keybindsetting.setName("Клавиша включения");
+         this.keybind = keybindsetting;
+         this.addSetting(this.keybind);
+      }
+   }
+
+   private static boolean check() {
+      try {
+         SystemClient systemclient = SystemClient.getInstance();
+         return systemclient != null && systemclient.getHashUtil() != null && systemclient.getHashUtil().isFlag3();
+      } catch (Exception exception) {
+         return false;
+      }
+   }
+
+   public synchronized void toggle() {
+      this.setEnabled(!this.enabled);
+   }
+
+   public void onTick() {
+   }
+
+   public void onHudRenderContext(HudRenderContext hudRenderContext) {
+   }
+
+   public void render(LevelRenderContext worldRenderContext) {
+   }
+
+   public void render2(LevelRenderContext worldRenderContext) {
+   }
+
+   public void render3(LevelRenderContext worldRenderContext) {
+   }
+
+   public void render4(LevelRenderContext worldRenderContext) {
+   }
+
+   public void render5(LevelRenderContext worldRenderContext) {
+   }
+
+   public void render6(LevelRenderContext worldRenderContext) {
+   }
+
+   public void render7(LevelRenderContext worldRenderContext) {
+   }
+
+   public void onAnimatedFloat(AnimatedFloat animatedFloat) {
+   }
+
+   public void onString(String text) {
+   }
+
+   private void bindSettingListener(Setting setting2) {
+      Runnable settingAction = setting2.getOnChange();
+      setting2.setOnChange(() -> {
+         if (settingAction != null) settingAction.run();
+         this.onSettingChanged(setting2);
+
+         try {
+            SystemClient systemclient = SystemClient.INSTANCE;
+            if (systemclient != null && systemclient.getHashUtil() != null) {
+               systemclient.getHashUtil().update5();
+            }
+         } catch (Exception exception) {
+         }
+      });
+   }
+
+   private synchronized void applyEnabled(boolean flag, AnimatedFloat animatedFloat) {
+      if (this.enabled != flag) {
+         if (!this.toggling) {
+            this.toggling = true;
+            this.enabled = flag;
+
+            try {
+               if (flag) {
+                  this.onEnable();
+                  SoundEngine.getInstance().onSoundEvent(SoundEvent.MODULE_ENABLE);
+               } else {
+                  this.onDisable();
+                  SoundEngine.getInstance().onSoundEvent(SoundEvent.MODULE_DISABLE);
+               }
+
+               if (this.check2() && !check()) {
+                  NotificationManager.getInstance().onBooleanModule(flag, this);
+               }
+            } catch (Exception exception2) {
+            } finally {
+               this.toggling = false;
+
+               try {
+                  ModuleRegistry moduleregistry = SystemClient.getInstance().getModuleRegistry();
+                  if (moduleregistry != null) {
+                     moduleregistry.update2();
+                  }
+               } catch (Exception exception1) {
+               }
+
+               try {
+                  SystemClient systemclient = SystemClient.getInstance();
+                  if (systemclient != null && systemclient.getHashUtil() != null) {
+                     systemclient.getHashUtil().update5();
+                  }
+               } catch (Exception exception) {
+               }
+            }
+         }
+      }
+   }
+
+   public void setEnabledSilent(boolean flag) {
+      if (this.enabled != flag) {
+         this.enabled = flag;
+
+         try {
+            ModuleRegistry moduleregistry = SystemClient.getInstance().getModuleRegistry();
+            if (moduleregistry != null) {
+               moduleregistry.update2();
+            }
+         } catch (Exception exception) {
+         }
+      }
+   }
+
+   public String getName() {
+      return this.name;
+   }
+
+   public String getDescription() {
+      return this.description != null ? this.description : "";
+   }
+
+   public void setDescription(String description) {
+      this.description = description != null ? description : "";
+   }
+
+   public Setting getSettingByName(String text) {
+      if (text != null && !text.trim().isEmpty()) {
+         this.lock.readLock().lock();
+
+         Setting setting2;
+         try {
+            for (Setting setting : this.settings) {
+               if (setting.getName().equals(text)) {
+                  return setting;
+               }
+            }
+
+            Iterator iterator = this.settings.iterator();
+
+            String s;
+            Setting setting1;
+            do {
+               if (!iterator.hasNext()) {
+                  return null;
+               }
+
+               setting1 = (Setting)iterator.next();
+               s = setting1.getName();
+            } while (!TextHash.isStringString(text, s));
+
+            setting2 = setting1;
+         } finally {
+            this.lock.readLock().unlock();
+         }
+
+         return setting2;
+      } else {
+         return null;
+      }
+   }
+
+   public List getVisibleSettings() {
+      this.lock.readLock().lock();
+
+      ArrayList arraylist1;
+      try {
+         ArrayList arraylist = new ArrayList();
+
+         for (Setting setting : this.settings) {
+            if (setting.isVisible()) {
+               arraylist.add(setting);
+            }
+         }
+
+         arraylist1 = arraylist;
+      } finally {
+         this.lock.readLock().unlock();
+      }
+
+      return arraylist1;
+   }
+
+   public void update() {
+   }
+
+   public int getSettingCount() {
+      this.lock.readLock().lock();
+
+      int i;
+      try {
+         i = this.settings.size();
+      } finally {
+         this.lock.readLock().unlock();
+      }
+
+      return i;
+   }
+
+   protected void onSettingChanged(Setting setting2) {
+   }
+
+   public List<Setting> getSettings() {
+      return this.settings;
+   }
+
+   public boolean hasSetting(String text) {
+      return this.getSettingByName(text) != null;
+   }
+
+   public void update2() {
+   }
+
+   public abstract void onDisable();
+
+   public boolean isEnabled() {
+      return this.enabled && net.aero.visuals.guard.AeroGuard.allowed();
+   }
+
+   public void forceDisabled() {
+      this.enabled = false;
+   }
+
+   public void update3() {
+   }
+
+   protected boolean check2() {
+      return true;
+   }
+
+   public Setting getSettingByHash(String text) {
+      if (text != null && !text.isEmpty()) {
+         this.lock.readLock().lock();
+
+         Setting setting1;
+         try {
+            Iterator iterator = this.settings.iterator();
+
+            Setting setting;
+            do {
+               if (!iterator.hasNext()) {
+                  return null;
+               }
+
+               setting = (Setting)iterator.next();
+            } while (!setting.getNameHash().equals(text));
+
+            setting1 = setting;
+         } finally {
+            this.lock.readLock().unlock();
+         }
+
+         return setting1;
+      } else {
+         return null;
+      }
+   }
+
+   public void onRotation(Rotation rotation) {
+   }
+
+   public List getSettingsCopy() {
+      this.lock.readLock().lock();
+
+      ArrayList arraylist;
+      try {
+         arraylist = new ArrayList<>(this.settings);
+      } finally {
+         this.lock.readLock().unlock();
+      }
+
+      return arraylist;
+   }
+
+   public void onPlayerEntity(Player playerEntity) {
+   }
+
+   public void addSettings(Setting... setting2) {
+      if (setting2 != null && setting2.length != 0) {
+         this.lock.writeLock().lock();
+
+         try {
+            for (Setting setting : setting2) {
+               if (setting != null && this.settings.stream().noneMatch(var1x -> var1x.getName().equals(setting.getName()))) {
+                  this.settings.add(setting);
+                  this.bindSettingListener(setting);
+               }
+            }
+         } finally {
+            this.lock.writeLock().unlock();
+         }
+      }
+   }
+
+
+   public Category getCategory() {
+      return this.category;
+   }
+
+   public void setEnabled(boolean flag) {
+      this.setEnabled(flag, null);
+   }
+
+   public void setEnabled(boolean flag, AnimatedFloat animatedFloat) {
+      if (this.client() != null && !this.client().isSameThread()) {
+         this.client().execute(() -> this.applyEnabled(flag, animatedFloat));
+      } else {
+         this.applyEnabled(flag, animatedFloat);
+      }
+   }
+
+   public void onSlotSelection(SlotSelection slotSelection) {
+   }
+
+   // By COLLAPSELOADER
+      // by COLLAPSELOADER
+           // By COLLAPSELOADER
+
+   public void onInteractEvent(InteractEvent interactEvent) {
+   }
+
+   public String getDisplayName() {
+      return Translations.getInstance().getStringByString2(this.name);
+   }
+
+   public ReentrantReadWriteLock getLock() {
+      return this.lock;
+   }
+
+   public void onAttackEvent(AttackEvent attackEvent) {
+   }
+
+
+   public KeybindSetting getKeybindSetting() {
+      return this.keybind;
+   }
+
+   public void addSetting(Setting setting2) {
+      if (setting2 != null) {
+         this.lock.writeLock().lock();
+
+         try {
+            if (this.settings.stream().noneMatch(var1x -> var1x.getName().equals(setting2.getName()))) {
+               this.settings.add(setting2);
+               this.bindSettingListener(setting2);
+            }
+         } finally {
+            this.lock.writeLock().unlock();
+         }
+      }
+   }
+
+   public InteractionResult getActionResultByPlayerEntityWorldHandEntityEntityHitResult(Player playerEntity, Level world2, InteractionHand hand, Entity entity2, EntityHitResult entityHitResult) {
+      return InteractionResult.PASS;
+   }
+
+   public InteractionResult getActionResultByPlayerEntityWorldHandBlockHitResult(Player playerEntity, Level world2, InteractionHand hand, BlockHitResult blockHitResult) {
+      return InteractionResult.PASS;
+   }
+
+   public void onPlayerEntityWorldHandEntityEntityHitResult(Player playerEntity, Level world2, InteractionHand hand, Entity entity2, EntityHitResult entityHitResult) {
+   }
+
+   public void onNoSlowState(NoSlowState noSlowState) {
+   }
+
+   public void update4() {
+   }
+
+   public void update5() {
+   }
+
+   public void update6() {
+   }
+
+   public void update7() {
+   }
+
+   public boolean isToggling() {
+      return this.toggling;
+   }
+
+   public abstract void onEnable();
+
+
+   public void update8() {
+   }
+
+   public void update9() {
+   }
+
+   public void update10() {
+   }
+}

@@ -1,0 +1,11 @@
+{
+  "id": 59,
+  "type": "cape",
+  "name": "Плащ - Layout",
+  "has_model": false,
+  "cape_animation": {
+    "frameWidth": 176,
+    "frameHeight": 136,
+    "frameTime": 1
+  }
+}

@@ -1,0 +1,344 @@
+{
+  "name": "Panda Hat",
+  "id": 407,
+  "category": 3,
+  "pos": 2,
+  "texture": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAETUlEQVR4AezZ34ocRRTH8Z6+iuAG4oW5yR9BV1B8hxh8AskjxXeTlYg3ouAqmD83kWQD2QRzN86n4TdUmp6dbmSzNU0PfFOnzjnTU+dPdXVv2vXmc/769fqv09NB2DYu62bzMZoHc2RuNN+4Nrdu3Vl/cfzle0TPhhs3PlmD/qpo35yfN/88f77z99n4cLh9+27z1dffdETPRo6eD9+3b9807/59t4WuRlqL+vTmTcMgpe3aR9eak5MfmwcPvm/u3f+uS5zgyXRsfIYuJBn0z549WYVXr85WoL8qWgHAAspgI7OBXRD3vr3f/PDwYfP7b782fECmY+PDF7rAWKL1h7ZG6fMh5VYAQaBDMp1FCeiXnx8RB2Hjw6iySLWN9LXRbYGxizo7e7nXNT67Ki0Rf57+sSrZe9FLdNhuAdXv/w5dYFttPkfXr68uYuOy4qsTbIdAB4kBuQa2W8BitPrHR0cNyNFFdsQ56uDYNKKU+fgeyhuiRNBJDMg10G0BVd61mNLmyCv92FDqcgzSvXzxwlA1baqdKperpQOf6MmgR/RGzwKpuhsg7PnApzZae7bc0+bo6yxc4MY+EnHn7medOq3eP+qy7yUFnXMF/2wfhe1l2MMgB3NrtQVC2frkJ4//buxt8IVkhOhdM9fjc9VsH4UFgTJAc9BZaDqAzhyqD7IjEGSBG/v4bq7Xt13FvDsGyx+2QPR15tkanx8fr1BuEzI7+Jak+qWuFrk7BcYuRutqYcfeEGx8XC83PqM9D/okjlwD3XPAvoWkxce0bnwkwo2vhG7fb122vX/9SR3gy/3tQRdKm0Q8ffp4e2Mk08W3lnFSAtwEdQMEYEQp8zGHgB/9dNKATFcbkxKQIMpKJ6Do4uOmCHseZMS/lrF7Ety3mFQ1o6rDHGS4jrnRDXEItproOiCLz2iBkTPSOeJUMZgjc6M530Nh+yicNjVCMBkTlLt4quoYHJL5HErw1tnuemaPnlMo3/To7HuQQ/8eIJEl8atl7LaAx9Zw0VObNz1vfOXibRHY+4it7I6yW2KvZWwFnsUIMDI9Mjdm7s1P0HR9koSM/MAvOnItdB2Qxez7A4bugDe/svXJWj+4nvtG2fpkOraaaD2rB8/rsMDoyMGbHsxVFWRIgjFVLtu+3A58amLnTXBokSoI1SxxWoCO3XeTHIlBqSPXwntboFyU/7ND+TLDnjm5PCkcfypND8mAxIAMtppoy7/Pk7X+RQt0D0Dfx/5Ppfu2muc7O8C9ABIS+oE4FdDXH9J8ZwKmBqG9tfrU7122/77rT06AroAL7+oMtkNhcgIOJbCx61wSMDZTc/VbOmCulR0b19IBYzM1V7+lA+Za2bFxLR0wNlNz9Vs6YK6VHRvX0gFjM3UoflPXuXTA1IzNzX/pgLlVdGo8SwdMzdjc/JcOmFtFp8azdMDUjM3Nf+mAuVV0ajxLB0zN2Nz8lw449Ir+3/X/BwAA///ia0H2AAAABklEQVQDAGCssq66u3q8AAAAAElFTkSuQmCC",
+  "model": {
+    "format_version": "1.12.0",
+    "minecraft:geometry": [
+      {
+        "description": {
+          "identifier": "geometry.panda_hat - Converted",
+          "texture_width": 64,
+          "texture_height": 64,
+          "visible_bounds_width": 2,
+          "visible_bounds_height": 2.5,
+          "visible_bounds_offset": [
+            0,
+            0.75,
+            0
+          ]
+        },
+        "bones": [
+          {
+            "name": "panda_hat",
+            "pivot": [
+              5,
+              5,
+              -5
+            ],
+            "cubes": [
+              {
+                "origin": [
+                  -5,
+                  5,
+                  -5
+                ],
+                "size": [
+                  10,
+                  6,
+                  10
+                ],
+                "uv": {
+                  "north": {
+                    "uv": [
+                      11,
+                      0
+                    ],
+                    "uv_size": [
+                      10,
+                      6
+                    ]
+                  },
+                  "east": {
+                    "uv": [
+                      11,
+                      7
+                    ],
+                    "uv_size": [
+                      10,
+                      6
+                    ]
+                  },
+                  "south": {
+                    "uv": [
+                      11,
+                      14
+                    ],
+                    "uv_size": [
+                      10,
+                      6
+                    ]
+                  },
+                  "west": {
+                    "uv": [
+                      11,
+                      21
+                    ],
+                    "uv_size": [
+                      10,
+                      6
+                    ]
+                  },
+                  "up": {
+                    "uv": [
+                      0,
+                      0
+                    ],
+                    "uv_size": [
+                      10,
+                      10
+                    ]
+                  },
+                  "down": {
+                    "uv": [
+                      0,
+                      21
+                    ],
+                    "uv_size": [
+                      10,
+                      -10
+                    ]
+                  }
+                }
+              },
+              {
+                "origin": [
+                  2,
+                  10,
+                  -1
+                ],
+                "size": [
+                  5,
+                  4,
+                  2
+                ],
+                "uv": {
+                  "north": {
+                    "uv": [
+                      0,
+                      22
+                    ],
+                    "uv_size": [
+                      5,
+                      4
+                    ]
+                  },
+                  "east": {
+                    "uv": [
+                      6,
+                      22
+                    ],
+                    "uv_size": [
+                      2,
+                      4
+                    ]
+                  },
+                  "south": {
+                    "uv": [
+                      22,
+                      0
+                    ],
+                    "uv_size": [
+                      5,
+                      4
+                    ]
+                  },
+                  "west": {
+                    "uv": [
+                      28,
+                      6
+                    ],
+                    "uv_size": [
+                      2,
+                      4
+                    ]
+                  },
+                  "up": {
+                    "uv": [
+                      0,
+                      27
+                    ],
+                    "uv_size": [
+                      5,
+                      2
+                    ]
+                  },
+                  "down": {
+                    "uv": [
+                      28,
+                      2
+                    ],
+                    "uv_size": [
+                      5,
+                      -2
+                    ]
+                  }
+                }
+              },
+              {
+                "origin": [
+                  -7,
+                  10,
+                  -1
+                ],
+                "size": [
+                  5,
+                  4,
+                  2
+                ],
+                "uv": {
+                  "north": {
+                    "uv": [
+                      22,
+                      5
+                    ],
+                    "uv_size": [
+                      5,
+                      4
+                    ]
+                  },
+                  "east": {
+                    "uv": [
+                      12,
+                      28
+                    ],
+                    "uv_size": [
+                      2,
+                      4
+                    ]
+                  },
+                  "south": {
+                    "uv": [
+                      22,
+                      10
+                    ],
+                    "uv_size": [
+                      5,
+                      4
+                    ]
+                  },
+                  "west": {
+                    "uv": [
+                      15,
+                      28
+                    ],
+                    "uv_size": [
+                      2,
+                      4
+                    ]
+                  },
+                  "up": {
+                    "uv": [
+                      28,
+                      3
+                    ],
+                    "uv_size": [
+                      5,
+                      2
+                    ]
+                  },
+                  "down": {
+                    "uv": [
+                      6,
+                      30
+                    ],
+                    "uv_size": [
+                      5,
+                      -2
+                    ]
+                  }
+                }
+              },
+              {
+                "origin": [
+                  -3,
+                  5,
+                  -7
+                ],
+                "size": [
+                  6,
+                  3,
+                  2
+                ],
+                "uv": {
+                  "north": {
+                    "uv": [
+                      22,
+                      15
+                    ],
+                    "uv_size": [
+                      6,
+                      3
+                    ]
+                  },
+                  "east": {
+                    "uv": [
+                      28,
+                      11
+                    ],
+                    "uv_size": [
+                      2,
+                      3
+                    ]
+                  },
+                  "south": {
+                    "uv": [
+                      22,
+                      19
+                    ],
+                    "uv_size": [
+                      6,
+                      3
+                    ]
+                  },
+                  "west": {
+                    "uv": [
+                      18,
+                      28
+                    ],
+                    "uv_size": [
+                      2,
+                      3
+                    ]
+                  },
+                  "up": {
+                    "uv": [
+                      22,
+                      23
+                    ],
+                    "uv_size": [
+                      6,
+                      2
+                    ]
+                  },
+                  "down": {
+                    "uv": [
+                      22,
+                      28
+                    ],
+                    "uv_size": [
+                      6,
+                      -2
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "height": 0.1,
+  "scale": 1,
+  "x": 0,
+  "y": -0.32,
+  "z": 0,
+  "yaw": 0,
+  "pitch": 0,
+  "roll": 0,
+  "previewY": 0,
+  "previewScale": 1
+}

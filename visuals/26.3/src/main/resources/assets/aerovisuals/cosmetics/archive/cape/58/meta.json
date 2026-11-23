@@ -1,0 +1,11 @@
+{
+  "id": 58,
+  "type": "cape",
+  "name": "Плащ -  Knife",
+  "has_model": false,
+  "cape_animation": {
+    "frameWidth": 44,
+    "frameHeight": 34,
+    "frameTime": 3
+  }
+}
